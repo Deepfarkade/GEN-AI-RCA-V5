@@ -235,13 +235,41 @@ class ChatService:
             )
 
             # Update the session title dynamically (use first 5 words of the user's message)
+            # if len(session.get("messages", [])) == 1:  # If it's the first user message
+            #     title_words = text[:20]  # Extract the first 20 characters
+            #     # title_words = text.split()[:5]  # Extract the first 5 words
+            #     new_title = " ".join(title_words) + "..."  # Add ellipsis for long titles
+            #     await sessions.update_one(
+            #         {"id": session_id},
+            #         {"$set": {"title": new_title}}
+            #     )
+
+
+            # Update the session title dynamically (use first 5 words but max 20 characters)
             if len(session.get("messages", [])) == 1:  # If it's the first user message
-                title_words = text.split()[:5]  # Extract the first 5 words
-                new_title = " ".join(title_words) + "..."  # Add ellipsis for long titles
+                words = text.split()  # Split text into words
+                title_words = []
+                char_count = 0
+
+                for word in words:
+                    if len(title_words) < 5 and (char_count + len(word) + (1 if title_words else 0)) <= 20:
+                        title_words.append(word)
+                        char_count += len(word) + (1 if title_words else 0)  # +1 for spaces
+                    else:
+                        break
+
+                new_title = " ".join(title_words) + ("..." if len(text) > char_count else "")  # Add ellipsis if needed
                 await sessions.update_one(
                     {"id": session_id},
                     {"$set": {"title": new_title}}
                 )
+
+
+
+
+
+
+
 
             # Get AI response
             ai_response = await self.ai_service.get_ai_response(

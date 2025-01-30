@@ -333,7 +333,7 @@ export default function ChatWindow({ initialSession }: ChatWindowProps) {
   return (
     <div className={`flex h-screen ${theme === 'dark' ? 'bg-dark-bg' : 'bg-light-bg'}`}>
       <div className={`${
-        isSidebarOpen ? 'w-64' : 'w-20'
+        isSidebarOpen ? 'w-70' : 'w-20'
       } ${
         theme === 'dark' ? 'bg-dark-sidebar' : 'bg-light-sidebar'
       } border-r ${
@@ -494,7 +494,7 @@ export default function ChatWindow({ initialSession }: ChatWindowProps) {
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col max-w-full overflow-x-auto">
         <div className={`${
           theme === 'dark' 
             ? 'bg-dark-sidebar border-dark-border' 
